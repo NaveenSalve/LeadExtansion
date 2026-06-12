@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Leads Extractor — Free Tool",
+  "version": "3.1",
+  "description": "Google Maps se business leads extract karo — bilkul free",
+  "permissions": ["activeTab", "scripting", "downloads", "tabs"],
+  "host_permissions": [
+    "*://www.google.com/maps/*",
+    "*://maps.google.com/*",
+    "*://www.bing.com/maps/*",
+    "*://bingplaces.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": { "48": "icon.png" }
+  },
+  "icons": { "48": "icon.png" }
+}

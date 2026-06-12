@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Leads Extractor</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f0f13; --surface: #1a1a23; --surface2: #22222e;
+    --border: #2e2e3e; --accent: #7c5cfc; --green: #22c55e;
+    --red: #f43f5e; --text: #e8e8f0; --muted: #6b6b8a; --r: 10px;
+  }
+  body { width: 390px; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; font-size: 13px; }
+
+  /* HEADER */
+  .hdr { background: linear-gradient(135deg,#1e1535,#0f0f13); padding: 12px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .hdr-left { display: flex; align-items: center; gap: 9px; }
+  .hdr-icon { width: 30px; height: 30px; background: linear-gradient(135deg,var(--accent),#a78bfa); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .hdr h1 { font-size: 14px; font-weight: 700; }
+  .hdr p { font-size: 10px; color: var(--muted); }
+  .badge { font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 600; }
+  .b-ok { background: #1e3a5f; color: #60a5fa; }
+  .b-err { background: #2a1a1a; color: #f87171; }
+
+  /* STATUS */
+  .sbar { padding: 6px 14px; font-size: 11px; text-align: center; min-height: 26px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .sbar.ok { color: var(--green); } .sbar.err { color: var(--red); } .sbar.info { color: #a78bfa; }
+  
+  /* ANIMATIONS */
+  .loader { width: 12px; height: 12px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+  .extracting .loader { display: block; }
+  .pulse-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 1.5s infinite; }
+
+  /* PROGRESS */
+  .prog-wrap { padding: 0 14px 8px; display: none; }
+  .prog-track { background: var(--surface2); border-radius: 20px; height: 6px; overflow: hidden; }
+  .prog-bar { height: 100%; background: linear-gradient(90deg,var(--accent),#a78bfa); border-radius: 20px; transition: width 0.4s; width: 0%; }
+  .prog-label { font-size: 10px; color: var(--muted); text-align: center; margin-top: 4px; }
+
+  /* BUTTONS */
+  .btn-row { padding: 12px 14px 6px; display: flex; flex-direction: column; gap: 8px; }
+  .btn { width: 100%; padding: 11px; border: none; border-radius: var(--r); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all .2s; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-main { background: linear-gradient(135deg,var(--accent),#6d4de8); color: #fff; }
+  .btn-main:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
+  .btn-stop { background: #2a1a1a; color: var(--red); border: 1px solid #3a2020; display: none; }
+  .btn-stop:hover:not(:disabled) { background: #3a2020; }
+  .btn-open { background: #1e3a5f; color: #60a5fa; text-decoration: none; }
+
+  /* STATS */
+  .stats { display: flex; gap: 6px; padding: 0 14px 8px; }
+  .stat { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px; text-align: center; }
+  .stat-n { font-size: 22px; font-weight: 800; line-height: 1; }
+  .n-total { color: #a78bfa; } .n-ok { color: var(--green); } .n-rm { color: var(--red); }
+  .stat-l { font-size: 9px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* FILTERS */
+  .sec { padding: 0 14px 8px; }
+  .sec-title { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 7px; }
+  .fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .fi { display: flex; align-items: center; gap: 7px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 9px; cursor: pointer; transition: all .15s; user-select: none; }
+  .fi:hover { border-color: var(--accent); }
+  .fi.on { border-color: var(--accent); background: #1a1535; }
+  .fi input { display: none; }
+  .fck { width: 15px; height: 15px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff; }
+  .fi.on .fck { background: var(--accent); border-color: var(--accent); }
+  .fl { font-size: 11px; font-weight: 600; }
+  .fs { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+  /* SEARCH */
+  .srow { padding: 0 14px 8px; display: flex; gap: 6px; }
+  .sinp { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; color: var(--text); font-size: 12px; outline: none; }
+  .sinp:focus { border-color: var(--accent); }
+  .sinp::placeholder { color: var(--muted); }
+  .ssel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 8px; color: var(--text); font-size: 11px; outline: none; cursor: pointer; }
+
+  /* RESULTS */
+  .res { padding: 0 14px; max-height: 200px; overflow-y: auto; }
+  .res::-webkit-scrollbar { width: 4px; }
+  .res::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-bottom: 5px; animation: slideIn 0.3s ease-out; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  .card:hover { border-color: var(--accent); }
+  .cname { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cmeta { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
+  .pill { font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+  .p-phone { background:#1a2e1a; color:#86efac; }
+  .p-site { background:#1a1f2e; color:#93c5fd; }
+  .p-nosite { background:#2e1a1a; color:#fca5a5; }
+  .p-star { background:#2e2414; color:#fde68a; }
+  .p-addr { background:#1e1f30; color:#a5b4fc; max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .empty { text-align: center; padding: 24px 16px; color: var(--muted); }
+  .ei { font-size: 34px; margin-bottom: 8px; }
+  .et { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .es { font-size: 11px; line-height: 1.6; }
+
+  .divider { height: 1px; background: var(--border); margin: 0 14px; }
+  .dl-row { padding: 10px 14px 14px; display: flex; gap: 8px; }
+  .btn-dl { flex: 1; padding: 10px; background: linear-gradient(135deg,#166534,#15803d); color: #fff; border: none; border-radius: var(--r); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all .2s; }
+  .btn-dl:hover:not(:disabled) { filter: brightness(1.12); }
+  .btn-dl:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-clr { padding: 10px 14px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); border-radius: var(--r); font-size: 13px; cursor: pointer; transition: all .2s; }
+  .btn-clr:hover { color: var(--red); border-color: var(--red); }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { display:inline-block; animation: spin .9s linear infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .pulse { animation: pulse 1.2s infinite; }
+</style>
+</head>
+<body id="mainBody">
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-icon">📍</div>
+    <div>
+      <h1>Leads Extractor</h1>
+      <p>Free Tool — by AI With Ankit</p>
+    </div>
+  </div>
+  <span class="badge b-err" id="badge">Loading...</span>
+</div>
+
+<div class="sbar" id="sbar">
+  <div class="loader" id="sLoader"></div>
+  <span id="sText">Page check ho rahi hai...</span>
+</div>
+
+<div class="prog-wrap" id="progWrap">
+  <div class="prog-track"><div class="prog-bar" id="progBar"></div></div>
+  <div class="prog-label" id="progLabel">Scroll kar raha hai...</div>
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-main" id="btnStart" disabled>⚡ Start Extraction</button>
+  <a href="https://maps.google.com" target="_blank" class="btn btn-open" id="btnOpenMaps" style="display:none">🌍 Open Google Maps</a>
+  <button class="btn btn-stop" id="btnStop">⏹ Stop</button>
+</div>
+
+<div class="stats" id="statsRow" style="display:none">
+  <div class="stat"><div class="stat-n n-total" id="stTotal">0</div><div class="stat-l">Found</div></div>
+  <div class="stat"><div class="stat-n n-ok" id="stFiltered">0</div><div class="stat-l">Filtered</div></div>
+  <div class="stat"><div class="stat-n n-rm" id="stRemoved">0</div><div class="stat-l">Hidden</div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-title">🔽 Filters</div>
+  <div class="fgrid">
+    <label class="fi on" id="fi-dup"><input type="checkbox" id="fDup" checked><div class="fck">✓</div><div><div class="fl">Duplicates Hatao</div><div class="fs">Same naam remove</div></div></label>
+    <label class="fi" id="fi-ns"><input type="checkbox" id="fNS"><div class="fck"></div><div><div class="fl">No Website Only</div><div class="fs">Website wale hatao</div></div></label>
+    <label class="fi" id="fi-ph"><input type="checkbox" id="fPH"><div class="fck"></div><div><div class="fl">Phone wale Only</div><div class="fs">Bina phone hatao</div></div></label>
+    <label class="fi" id="fi-rt"><input type="checkbox" id="fRT"><div class="fck"></div><div><div class="fl">Low Rating ≤3★</div><div class="fs">3 star se kam</div></div></label>
+  </div>
+</div>
+
+<div class="srow" id="searchRow" style="display:none">
+  <input class="sinp" id="sinp" placeholder="🔍 Business naam search...">
+  <select class="ssel" id="ssel">
+    <option value="">Sort</option>
+    <option value="name">A → Z</option>
+    <option value="rating">Rating ↓</option>
+    <option value="phone">Phone First</option>
+    <option value="nosite">No Site First</option>
+  </select>
+</div>
+
+<div class="res" id="resSection">
+  <div class="empty">
+    <div class="ei">🗺️</div>
+    <div class="et">Abhi koi data nahi hai</div>
+    <div class="es">Maps pe search karke <b>Start</b> dabao.<br>Live results yahan dikhenge!</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="dl-row">
+  <button class="btn-dl" id="btnDL" disabled>📥 CSV Download</button>
+  <button class="btn-clr" id="btnClr">🗑️</button>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

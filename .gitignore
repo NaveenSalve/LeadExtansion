@@ -1,0 +1,11 @@
+# Chrome Extension Files
+*.zip
+*.crx
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Project specifics
+/memory/
+.gemini/
