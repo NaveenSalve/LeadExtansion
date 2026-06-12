@@ -1,4 +1,4 @@
-# 📍 Leads Extractor — AI With Ankit
+# 📍 Leads Extractor — Naveen Salve
 
 ## Install Kaise Karein (3 Steps)
 
@@ -13,10 +13,10 @@
 
 ## Use Kaise Karein
 
-1. **Google Maps** ya **Bing Places** pe jaao
+1. **Google Maps** ya **Bing Maps** pe jaao
 2. Koi business search karo (e.g. `dentists Delhi`)
 3. Results load hone do — scroll karo
-4. Extension icon click karo → **Extract Leads** button dabao
+4. Extension icon click karo → **Start Extraction** button dabao
 5. Filters lagao → **CSV Download Karo**
 
 ---
@@ -40,4 +40,4 @@
 
 ---
 
-**By AI With Ankit** | @ai_withankit | youtube.com/@aiwith_ankit
+**By Naveen Salve** | [LinkedIn](https://www.linkedin.com/in/naveensalve01/) | [Instagram](https://www.instagram.com/itzz_mr_naveen/)

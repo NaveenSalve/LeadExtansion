@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Leads Extractor — Free Tool",
+  "name": "Leads Extractor — Naveen Salve",
   "version": "3.1",
   "description": "Google Maps se business leads extract karo — bilkul free",
   "permissions": ["activeTab", "scripting", "downloads", "tabs"],
