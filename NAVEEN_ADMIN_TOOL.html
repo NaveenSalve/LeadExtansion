@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Naveen's Master Admin Panel</title>
+    <style>
+        body { background: #0f0f13; color: #e8e8f0; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { background: #1a1a23; padding: 40px; border-radius: 20px; border: 1px solid #2e2e3e; width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        h1 { color: #7c5cfc; margin-bottom: 10px; }
+        p { color: #6b6b8a; font-size: 13px; margin-bottom: 30px; }
+        input { width: 100%; background: #22222e; border: 1.5px solid #2e2e3e; padding: 15px; border-radius: 10px; color: white; text-align: center; font-size: 18px; margin-bottom: 20px; outline: none; transition: border 0.3s; }
+        input:focus { border-color: #7c5cfc; }
+        .btn { background: #7c5cfc; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; transition: transform 0.2s; }
+        .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .result { margin-top: 30px; background: #0f0f13; padding: 20px; border-radius: 10px; border: 1px dashed #7c5cfc; display: none; }
+        .key-text { font-family: monospace; font-size: 20px; color: #22c55e; font-weight: bold; word-break: break-all; }
+        .copy-btn { font-size: 11px; color: #7c5cfc; cursor: pointer; margin-top: 10px; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h1>Master Admin</h1>
+    <p>Leads Extractor - Key Generator</p>
+    
+    <input type="text" id="reqCode" placeholder="Enter User's Request Code">
+    <button class="btn" onclick="generateKey()">Generate Activation Key</button>
+    
+    <div id="resultBox" class="result">
+        <div style="font-size: 10px; color: #6b6b8a; margin-bottom: 10px; text-transform: uppercase;">User's Activation Key:</div>
+        <div id="finalKey" class="key-text"></div>
+        <div class="copy-btn" onclick="copyKey()">Copy Key</div>
+    </div>
+</div>
+
+<script>
+    const SECRET_SALT = "NAV_SUPER_SAFE_99_SALVE"; // Matches popup.js
+
+    function generateKey() {
+        const code = document.getElementById('reqCode').value.trim().toUpperCase();
+        if (code.length < 5) {
+            alert("Pehle sahi Request Code daalein!");
+            return;
+        }
+        
+        const key = code + SECRET_SALT;
+        document.getElementById('finalKey').textContent = key;
+        document.getElementById('resultBox').style.display = 'block';
+    }
+
+    function copyKey() {
+        const key = document.getElementById('finalKey').textContent;
+        navigator.clipboard.writeText(key);
+        alert("Key copied to clipboard!");
+    }
+</script>
+
+</body>
+</html>

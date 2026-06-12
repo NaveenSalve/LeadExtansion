@@ -5,7 +5,7 @@ let isGood = false;
 let extracting = false;
 
 // ---- ACTIVATION SYSTEM ----
-const SECRET_SALT = "NAV77"; // Isse mat badalna
+const SECRET_SALT = "NAV_SUPER_SAFE_99_SALVE"; // Matches Admin Tool
 
 async function checkActivation() {
   const data = await chrome.storage.local.get(['activated', 'machineId']);
