@@ -111,6 +111,27 @@
 </head>
 <body id="mainBody">
 
+<!-- ACTIVATION OVERLAY -->
+<div id="lockOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:9999; padding:30px; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+  <div style="font-size:50px; margin-bottom:20px;">🔒</div>
+  <h2 style="color:var(--text); margin-bottom:10px;">Activation Required</h2>
+  <p style="color:var(--muted); font-size:12px; margin-bottom:20px;">Aapko is extension ko use karne ke liye Naveen Salve se permission chahiye.</p>
+  
+  <div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:8px; width:100%; margin-bottom:15px;">
+    <p style="font-size:9px; color:var(--muted); text-transform:uppercase;">Request Code:</p>
+    <p id="requestCode" style="font-family:monospace; font-size:16px; color:var(--accent); font-weight:bold; letter-spacing:2px;"></p>
+  </div>
+  
+  <p style="font-size:11px; color:var(--muted); margin-bottom:10px;">Upar wala code LinkedIn/Insta par Naveen ko bhejein.</p>
+  
+  <input type="text" id="licenseInput" placeholder="Enter Activation Key" style="width:100%; background:var(--surface2); border:1.5px solid var(--border); padding:12px; border-radius:8px; color:white; text-align:center; margin-bottom:10px; outline:none;">
+  <button id="btnActivate" class="btn btn-main">Activate Now</button>
+  
+  <div style="margin-top:20px; font-size:10px; color:var(--muted);">
+    <a href="https://www.linkedin.com/in/naveensalve01/" target="_blank" style="color:var(--accent); text-decoration:none;">Contact Naveen Salve</a>
+  </div>
+</div>
+
 <div class="hdr">
   <div class="hdr-left">
     <div class="hdr-icon">📍</div>

@@ -3,7 +3,7 @@
   "name": "Leads Extractor — Naveen Salve",
   "version": "3.1",
   "description": "Google Maps se business leads extract karo — bilkul free",
-  "permissions": ["activeTab", "scripting", "downloads", "tabs"],
+  "permissions": ["activeTab", "scripting", "downloads", "tabs", "storage"],
   "host_permissions": [
     "*://www.google.com/maps/*",
     "*://maps.google.com/*",

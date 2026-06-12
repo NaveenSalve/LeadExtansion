@@ -4,6 +4,45 @@ let tabId = null;
 let isGood = false;
 let extracting = false;
 
+// ---- ACTIVATION SYSTEM ----
+const SECRET_SALT = "NAV77"; // Isse mat badalna
+
+async function checkActivation() {
+  const data = await chrome.storage.local.get(['activated', 'machineId']);
+  let mid = data.machineId;
+  
+  if (!mid) {
+    mid = Math.random().toString(36).substring(2, 10).toUpperCase();
+    await chrome.storage.local.set({ machineId: mid });
+  }
+  
+  document.getElementById('requestCode').textContent = mid;
+  
+  if (data.activated) {
+    document.getElementById('lockOverlay').style.display = 'none';
+  } else {
+    document.getElementById('lockOverlay').style.display = 'flex';
+  }
+}
+
+document.getElementById('btnActivate').addEventListener('click', async () => {
+  const input = document.getElementById('licenseInput').value.trim();
+  const mid = document.getElementById('requestCode').textContent;
+  
+  // Simple Logic: Key = MachineID + SALT
+  const expectedKey = mid + SECRET_SALT;
+  
+  if (input === expectedKey) {
+    await chrome.storage.local.set({ activated: true });
+    alert("✅ Extension Activated! Ab aap ise use kar sakte hain.");
+    document.getElementById('lockOverlay').style.display = 'none';
+  } else {
+    alert("❌ Galat Activation Key! Naveen Salve se contact karein.");
+  }
+});
+
+checkActivation();
+
 // ---- MESSAGE LISTENER FOR LIVE RESULTS ----
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === 'LEADS_FOUND') {
