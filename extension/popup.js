@@ -4,45 +4,6 @@ let tabId = null;
 let isGood = false;
 let extracting = false;
 
-// ---- ACTIVATION SYSTEM ----
-const SECRET_SALT = "NAV_SUPER_SAFE_99_SALVE"; // Matches Admin Tool
-
-async function checkActivation() {
-  const data = await chrome.storage.local.get(['activated', 'machineId']);
-  let mid = data.machineId;
-  
-  if (!mid) {
-    mid = Math.random().toString(36).substring(2, 10).toUpperCase();
-    await chrome.storage.local.set({ machineId: mid });
-  }
-  
-  document.getElementById('requestCode').textContent = mid;
-  
-  if (data.activated) {
-    document.getElementById('lockOverlay').style.display = 'none';
-  } else {
-    document.getElementById('lockOverlay').style.display = 'flex';
-  }
-}
-
-document.getElementById('btnActivate').addEventListener('click', async () => {
-  const input = document.getElementById('licenseInput').value.trim();
-  const mid = document.getElementById('requestCode').textContent;
-  
-  // Simple Logic: Key = MachineID + SALT
-  const expectedKey = mid + SECRET_SALT;
-  
-  if (input === expectedKey) {
-    await chrome.storage.local.set({ activated: true });
-    alert("✅ Extension Activated! Ab aap ise use kar sakte hain.");
-    document.getElementById('lockOverlay').style.display = 'none';
-  } else {
-    alert("❌ Galat Activation Key! Naveen Salve se contact karein.");
-  }
-});
-
-checkActivation();
-
 // ---- MESSAGE LISTENER FOR LIVE RESULTS ----
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === 'LEADS_FOUND') {
@@ -62,17 +23,17 @@ chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
   const url = tab.url || '';
 
   if (url.includes('google.com/maps') || url.includes('maps.google.com')) {
-    setBadge('🗺 Google Maps', true);
+    setBadge('Google Maps', true);
     setS('Ready! Start dabaiye', 'info');
     isGood = true;
     document.getElementById('btnStart').disabled = false;
   } else if (url.includes('bing.com/maps') || url.includes('bingplaces.com')) {
-    setBadge('🔷 Bing Maps', true);
+    setBadge('Bing Maps', true);
     setS('Ready! Start dabaiye', 'info');
     isGood = true;
     document.getElementById('btnStart').disabled = false;
   } else {
-    setBadge('❌ Wrong Page', false);
+    setBadge('Wrong Page', false);
     setS('Pehle Maps open karein', 'err');
     document.getElementById('btnStart').style.display = 'none';
     document.getElementById('btnOpenMaps').style.display = 'flex';
@@ -225,7 +186,7 @@ function renderCards() {
   if (!filteredLeads.length && !allLeads.length) return; // Keep empty state if nothing ever found
   
   if (!filteredLeads.length) {
-    c.innerHTML = `<div class="empty"><div class="ei">🔍</div><div class="et">No results for filters</div></div>`;
+    c.innerHTML = `<div class="empty"><div class="ei"></div><div class="et">No results for filters</div></div>`;
     return;
   }
   
@@ -233,10 +194,10 @@ function renderCards() {
     <div class="card">
       <div class="cname">${i+1}. ${esc(l.name)}</div>
       <div class="cmeta">
-        ${l.phone?`<span class="pill p-phone">📞 ${esc(l.phone)}</span>`:''}
-        ${l.website?`<span class="pill p-site">🌐 Site</span>`:`<span class="pill p-nosite">❌ No Site</span>`}
-        ${l.rating?`<span class="pill p-star">⭐ ${esc(l.rating)}</span>`:''}
-        ${l.address?`<span class="pill p-addr">📍 ${esc(l.address.substring(0,30))}</span>`:''}
+        ${l.phone?`<span class="pill p-phone">${esc(l.phone)}</span>`:''}
+        ${l.website?`<span class="pill p-site">Site</span>`:`<span class="pill p-nosite">No Site</span>`}
+        ${l.rating?`<span class="pill p-star">${esc(l.rating)}</span>`:''}
+        ${l.address?`<span class="pill p-addr">${esc(l.address.substring(0,30))}</span>`:''}
       </div>
     </div>`).join('') + (filteredLeads.length > 50 ? `<div style="text-align:center;font-size:10px;color:var(--muted);padding:5px;">+ ${filteredLeads.length-50} more leads...</div>` : '');
 }
@@ -256,7 +217,7 @@ if (btnDL) {
     a.href = URL.createObjectURL(blob);
     a.download = `leads_${new Date().toISOString().slice(0,10)}.csv`;
     a.click();
-    setS(`✅ ${filteredLeads.length} CSV Downloaded!`, 'ok');
+    setS(`${filteredLeads.length} CSV Downloaded!`, 'ok');
   });
 }
 
@@ -271,7 +232,7 @@ if (btnClr) {
     if (statsRow) statsRow.style.display='none';
     if (searchRow) searchRow.style.display='none';
     if (btnDL) btnDL.disabled=true;
-    if (resSection) resSection.innerHTML=`<div class="empty"><div class="ei">🗺️</div><div class="et">Data Cleared</div><div class="es">Click Start to search again.</div></div>`;
+    if (resSection) resSection.innerHTML=`<div class="empty"><div class="ei"></div><div class="et">Data Cleared</div><div class="es">Click Start to search again.</div></div>`;
     setS('Cleared', '');
   });
 }

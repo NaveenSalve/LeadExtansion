@@ -11,8 +11,6 @@
     "*://bingplaces.com/*"
   ],
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": { "48": "icon.png" }
-  },
-  "icons": { "48": "icon.png" }
+    "default_popup": "popup.html"
+  }
 }

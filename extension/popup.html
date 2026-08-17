@@ -111,30 +111,9 @@
 </head>
 <body id="mainBody">
 
-<!-- ACTIVATION OVERLAY -->
-<div id="lockOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:9999; padding:30px; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
-  <div style="font-size:50px; margin-bottom:20px;">🔒</div>
-  <h2 style="color:var(--text); margin-bottom:10px;">Activation Required</h2>
-  <p style="color:var(--muted); font-size:12px; margin-bottom:20px;">Aapko is extension ko use karne ke liye Naveen Salve se permission chahiye.</p>
-  
-  <div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:8px; width:100%; margin-bottom:15px;">
-    <p style="font-size:9px; color:var(--muted); text-transform:uppercase;">Request Code:</p>
-    <p id="requestCode" style="font-family:monospace; font-size:16px; color:var(--accent); font-weight:bold; letter-spacing:2px;"></p>
-  </div>
-  
-  <p style="font-size:11px; color:var(--muted); margin-bottom:10px;">Upar wala code LinkedIn/Insta par Naveen ko bhejein.</p>
-  
-  <input type="text" id="licenseInput" placeholder="Enter Activation Key" style="width:100%; background:var(--surface2); border:1.5px solid var(--border); padding:12px; border-radius:8px; color:white; text-align:center; margin-bottom:10px; outline:none;">
-  <button id="btnActivate" class="btn btn-main">Activate Now</button>
-  
-  <div style="margin-top:20px; font-size:10px; color:var(--muted);">
-    <a href="https://www.linkedin.com/in/naveensalve01/" target="_blank" style="color:var(--accent); text-decoration:none;">Contact Naveen Salve</a>
-  </div>
-</div>
-
 <div class="hdr">
   <div class="hdr-left">
-    <div class="hdr-icon">📍</div>
+    <div class="hdr-icon">LE</div>
     <div>
       <h1>Leads Extractor</h1>
       <p>Free Tool — by Naveen Salve</p>
@@ -154,9 +133,9 @@
 </div>
 
 <div class="btn-row">
-  <button class="btn btn-main" id="btnStart" disabled>⚡ Start Extraction</button>
-  <a href="https://maps.google.com" target="_blank" class="btn btn-open" id="btnOpenMaps" style="display:none">🌍 Open Google Maps</a>
-  <button class="btn btn-stop" id="btnStop">⏹ Stop</button>
+  <button class="btn btn-main" id="btnStart" disabled>Start Extraction</button>
+  <a href="https://maps.google.com" target="_blank" class="btn btn-open" id="btnOpenMaps" style="display:none">Open Google Maps</a>
+  <button class="btn btn-stop" id="btnStop">Stop</button>
 </div>
 
 <div class="stats" id="statsRow" style="display:none">
@@ -166,21 +145,21 @@
 </div>
 
 <div class="sec">
-  <div class="sec-title">🔽 Filters</div>
+  <div class="sec-title">Filters</div>
   <div class="fgrid">
     <label class="fi on" id="fi-dup"><input type="checkbox" id="fDup" checked><div class="fck">✓</div><div><div class="fl">Duplicates Hatao</div><div class="fs">Same naam remove</div></div></label>
     <label class="fi" id="fi-ns"><input type="checkbox" id="fNS"><div class="fck"></div><div><div class="fl">No Website Only</div><div class="fs">Website wale hatao</div></div></label>
     <label class="fi" id="fi-ph"><input type="checkbox" id="fPH"><div class="fck"></div><div><div class="fl">Phone wale Only</div><div class="fs">Bina phone hatao</div></div></label>
-    <label class="fi" id="fi-rt"><input type="checkbox" id="fRT"><div class="fck"></div><div><div class="fl">Low Rating ≤3★</div><div class="fs">3 star se kam</div></div></label>
+    <label class="fi" id="fi-rt"><input type="checkbox" id="fRT"><div class="fck"></div><div><div class="fl">Low Rating ≤3</div><div class="fs">3 star se kam</div></div></label>
   </div>
 </div>
 
 <div class="srow" id="searchRow" style="display:none">
-  <input class="sinp" id="sinp" placeholder="🔍 Business naam search...">
+  <input class="sinp" id="sinp" placeholder="Business naam search...">
   <select class="ssel" id="ssel">
     <option value="">Sort</option>
-    <option value="name">A → Z</option>
-    <option value="rating">Rating ↓</option>
+    <option value="name">A-Z</option>
+    <option value="rating">Rating High-Low</option>
     <option value="phone">Phone First</option>
     <option value="nosite">No Site First</option>
   </select>
@@ -188,7 +167,7 @@
 
 <div class="res" id="resSection">
   <div class="empty">
-    <div class="ei">🗺️</div>
+    <div class="ei"></div>
     <div class="et">Abhi koi data nahi hai</div>
     <div class="es">Maps pe search karke <b>Start</b> dabao.<br>Live results yahan dikhenge!</div>
   </div>
@@ -196,8 +175,8 @@
 
 <div class="divider"></div>
 <div class="dl-row">
-  <button class="btn-dl" id="btnDL" disabled>📥 CSV Download</button>
-  <button class="btn-clr" id="btnClr">🗑️</button>
+  <button class="btn-dl" id="btnDL" disabled>CSV Download</button>
+  <button class="btn-clr" id="btnClr">Clear</button>
 </div>
 
 <script src="popup.js"></script>
